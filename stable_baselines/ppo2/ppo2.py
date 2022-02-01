@@ -438,7 +438,18 @@ class PPO2(ActorCriticRLModel):
 
         self._save_to_file(save_path, data=data, params=params_to_save, cloudpickle=cloudpickle)
 
+####################################### This block has some code that can be used for debugging (The code might not be in order) #########################################################
 
+# with self.graph.as_default():
+#     for op in tf.get_default_graph().get_operations(): 
+#         print(op.name, op.outputs)
+#     print(tf.get_default_graph().get_tensor_by_name('output/Softmax:0'))
+#     print([n.name for n in tf.get_default_graph().as_graph_def().node])
+#     print([ op for op in tf.get_default_graph().get_operations() if op.type == "Placeholder"]) #How to get the list of placeholders
+# graph_new = tf.Graph()
+# sess_new = tf_util.make_session(num_cpu=self.n_cpu_tf_sess, graph=graph_new)
+
+####################################### End of bloack ####################################################################################################################################
 class Runner(AbstractEnvRunner):
     def __init__(self, *, env, model, n_steps, gamma, lam):
         """
