@@ -438,6 +438,19 @@ class PPO2(ActorCriticRLModel):
 
         self._save_to_file(save_path, data=data, params=params_to_save, cloudpickle=cloudpickle)
 
+        print("####### saving the graph in .pb ###########")
+        with self.graph.as_default():
+            output_graph_def = tf.graph_util.convert_variables_to_constants(
+            self.sess, # The session is used to retrieve the weights
+            tf.get_default_graph().as_graph_def(), # The graph_def is used to retrieve the nodes 
+            output_node_names=['output/ArgMax'] # The output node names are used to select the usefull nodes
+        )
+            output_graph = "saved_model.pb"
+            with tf.gfile.GFile(output_graph, "wb") as f:
+                f.write(output_graph_def.SerializeToString())
+            print("%d ops in the final graph." % len(output_graph_def.node))
+        print("###### Saved successfully ##########")
+
 ####################################### This block has some code that can be used for debugging (The code might not be in order) #########################################################
 
 # with self.graph.as_default():
